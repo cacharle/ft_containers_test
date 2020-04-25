@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:20 by charles           #+#    #+#             */
-/*   Updated: 2020/04/24 21:22:35 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 10:40:01 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ int main(int argc, char **argv)
     {
         std::string option(argv[1]);
         if (option == "vector")
-            vector_test();
+            vectorTest();
     }
-    vector_test();
+    else
+    {
+        vectorTest();
+    }
     return 0;
 }

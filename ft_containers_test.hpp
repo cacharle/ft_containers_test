@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:54 by charles           #+#    #+#             */
-/*   Updated: 2020/04/24 21:36:24 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 10:39:15 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ void log(const std::string& prefix,
 ** vector_test.cpp
 */
 
-void vector_test();
+void vectorTest();
 
 #endif
