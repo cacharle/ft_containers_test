@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 21:08:51 by charles           #+#    #+#             */
-/*   Updated: 2020/04/24 21:18:20 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 12:33:54 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,5 @@ void log(const std::string& prefix,
          int lineNum,
          const std::string& code)
 {
-    std::cout << prefix << filename << ':' << lineNum << " (" << code << ")\n";
+    std::cout << prefix << filename << ':' << lineNum << " (" << code << ")" << std::endl;
 }

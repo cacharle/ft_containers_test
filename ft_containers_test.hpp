@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:54 by charles           #+#    #+#             */
-/*   Updated: 2020/04/25 10:39:15 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 13:15:56 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ static pid_t testSegvPid;
 
 # define ASSERT(x) do {                                                         \
     SANDBOX(x);                                                                 \
-    if (!WIFEXITED(testSegvPid)) log("[ERROR SEGV  ] ", __FILE__, __LINE__, #x); \
-    else if (!(x))               log("[ERROR ASSERT] ", __FILE__, __LINE__, #x); \
-    else                         log("[PASS        ] ", __FILE__, __LINE__, #x); \
+    if (!WIFEXITED(testSegvPid)) log("[FAIL SEGV  ] ", __FILE__, __LINE__, #x); \
+    else if (!(x))               log("[FAIL ASSERT] ", __FILE__, __LINE__, #x); \
+    else                         log("[PASS       ] ", __FILE__, __LINE__, #x); \
 } while(0)
 
 # define TEST_SEGV(x) do {                                                      \
     SANDBOX(x);                                                                 \
-    if (!WIFEXITED(testSegvPid)) log("[ERROR SEGV  ] ", __FILE__, __LINE__, #x); \
-    else                         log("[PASS        ] ", __FILE__, __LINE__, #x); \
+    if (!WIFEXITED(testSegvPid)) log("[FAIL SEGV  ] ", __FILE__, __LINE__, #x); \
+    else                         log("[PASS       ] ", __FILE__, __LINE__, #x); \
 } while(0)
 
 /*

@@ -6,12 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/24 20:21:03 by charles           #+#    #+#              #
-#    Updated: 2020/04/25 09:42:31 by charles          ###   ########.fr        #
+#    Updated: 2020/04/25 13:43:04 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FT_CONTAINERS_DIR = ../ft_containers
-
+PYTHON = python3
+PRETTIER = prettier.py
 NAME = ft_containers_test
 
 CXX = clang++
@@ -20,6 +21,9 @@ CXXFLAGS = -std=c++98 -Wall -Wextra -I$(FT_CONTAINERS_DIR)
 SRC = main.cpp vector_test.cpp log.cpp
 OBJ = $(SRC:.cpp=.o)
 INC = ft_containers_test.hpp
+
+run: all
+	@./$(NAME) | $(PYTHON) $(PRETTIER)
 
 all: $(NAME)
 

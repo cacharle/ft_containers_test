@@ -1,2 +1,3 @@
 *.o
 ft_containers_test
+result.log
