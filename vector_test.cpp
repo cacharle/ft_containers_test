@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:34:52 by charles           #+#    #+#             */
-/*   Updated: 2020/04/25 11:40:15 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 16:16:00 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,366 @@ static void testBegin()
         ASSERT(*v1_it-- == arr1[4 - i]);
 }
 
+static void testResize()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    v1.resize(7);
+    ASSERT(v1.size() == 7);
+    ASSERT(v1.capacity() >= 7);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v1[i] == arr1[i]);
+    for (size_t i = 5; i < v1.size(); i++)
+        ASSERT(v1[i] == int());
+
+    v1.resize(10, 42);
+    ASSERT(v1.size() == 10);
+    ASSERT(v1.capacity() >= 10);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v1[i] == arr1[i]);
+    for (size_t i = 5; i < 7; i++)
+        ASSERT(v1[i] == int());
+    for (size_t i = 7; i < v1.size(); i++)
+        ASSERT(v1[i] == 42);
+
+    size_t prev_capacity = v1.capacity();
+    v1.resize(10);
+    ASSERT(v1.size() == 10);
+    ASSERT(v1.capacity() == prev_capacity);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v1[i] == arr1[i]);
+    for (size_t i = 5; i < 7; i++)
+        ASSERT(v1[i] == int());
+    for (size_t i = 7; i < v1.size(); i++)
+        ASSERT(v1[i] == 42);
+
+    v1.resize(6);
+    ASSERT(v1.size() == 6);
+    ASSERT(v1.capacity() >= 6);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v1[i] == arr1[i]);
+    ASSERT(v1[5] == int());
+
+    v1.resize(1);
+    ASSERT(v1.size() == 1);
+    ASSERT(v1.capacity() >= 1);
+    ASSERT(v1[0] == arr1[0]);
+
+    v1.resize(0);
+    ASSERT(v1.size() == 0);
+    ASSERT(v1.capacity() >= 0);
+}
+
+static void testReserve()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    v1.reserve(0);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 5);
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(v1[i] == arr1[i]);
+
+    v1.reserve(5);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 5);
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(v1[i] == arr1[i]);
+
+    v1.reserve(6);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 6);
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(v1[i] == arr1[i]);
+
+    v1.reserve(30);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 30);
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(v1[i] == arr1[i]);
+}
+
+static void testOperatorBracket()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+    ASSERT(v1[3] == 4);
+    ASSERT(v1[4] == 5);
+
+    int&       mut  = v1[0];
+    const int& imut = v1[0];
+    ASSERT(mut == 1);
+    ASSERT(imut == 1);
+}
+
+static void testAt()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    try
+    {
+        ASSERT(v1.at(0) == 1);
+        ASSERT(v1.at(1) == 2);
+        ASSERT(v1.at(2) == 3);
+        ASSERT(v1.at(3) == 4);
+        ASSERT(v1.at(4) == 5);
+
+        int&       mut  = v1.at(0);
+        const int& imut = v1.at(0);
+        ASSERT(mut == 1);
+        ASSERT(imut == 1);
+    }
+    catch (const std::exception& e) { ASSERT(false); }
+
+    try { v1.at(5); }
+    catch (const std::out_of_range& e) { ASSERT(true); }
+    catch (const std::exception& e)    { ASSERT(false); }
+
+    try { v1.at(-1); }
+    catch (const std::out_of_range& e) { ASSERT(true); }
+    catch (const std::exception& e)    { ASSERT(false); }
+}
+
+static void testFront()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    int&       mut  = v1.front();
+    const int& imut = v1.front();
+    ASSERT(mut == 1);
+    ASSERT(imut == 1);
+}
+
+static void testBack()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    int&       mut  = v1.back();
+    const int& imut = v1.back();
+    ASSERT(mut == 5);
+    ASSERT(imut == 5);
+}
+
+static void testAssign()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    v1.assign(arr1 + 1, arr1 + 4);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    for (size_t i = 0; i < 3; i++)
+        ASSERT(v1[i] == arr1[i + 1]);
+
+    v1.assign((size_t)6, (int)42);
+    ASSERT(v1.size() == 6);
+    ASSERT(v1.capacity() >= 6);
+    for (size_t i = 0; i < 6; i++)
+        ASSERT(v1[i] == 42);
+
+    // fml
+    // std::vector< std::vector<int>::size_type > ve(arr1, arr1 + 5);
+    // ve.assign(6, 42);
+    // ASSERT(ve.size() == 6);
+    // ASSERT(ve.capacity() >= 6);
+    // for (size_t i = 0; i < 6; i++)
+    //     ASSERT(ve[i] == 42);
+}
+
+static void testPushBack()
+{
+    ft::Vector<int> v1;
+
+    v1.push_back(1);
+    ASSERT(v1.size() == 1);
+    ASSERT(v1.capacity() >= 1);
+    ASSERT(v1[0] == 1);
+
+    v1.push_back(2);
+    ASSERT(v1.size() == 2);
+    ASSERT(v1.capacity() >= 2);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+
+    v1.push_back(3);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+
+    v1.push_back(4);
+    ASSERT(v1.size() == 4);
+    ASSERT(v1.capacity() >= 4);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+    ASSERT(v1[3] == 4);
+
+    v1.push_back(5);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 5);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+    ASSERT(v1[3] == 4);
+    ASSERT(v1[4] == 5);
+}
+
+static void testPopBack()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    v1.pop_back();
+    ASSERT(v1.size() == 4);
+    ASSERT(v1.capacity() >= 4);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+    ASSERT(v1[3] == 4);
+
+    v1.pop_back();
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+
+    v1.pop_back();
+    ASSERT(v1.size() == 2);
+    ASSERT(v1.capacity() >= 2);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+
+    v1.pop_back();
+    ASSERT(v1.size() == 1);
+    ASSERT(v1.capacity() >= 1);
+    ASSERT(v1[0] == 1);
+
+    v1.pop_back();
+    ASSERT(v1.size() == 0);
+    ASSERT(v1.capacity() >= 0);
+}
+
+static void testInsert()
+{
+
+}
+
+static void testErase()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    ft::Vector<int>::iterator it;
+
+    it = v1.erase(v1.begin());
+    ASSERT(v1.size() == 4);
+    ASSERT(v1.capacity() >= 4);
+    for (size_t i = 0; i < 4; i++)
+        ASSERT(v1[i] == arr1[i + 1]);
+    ASSERT(*it == 2);
+
+    it = v1.erase(v1.end() - 1);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    for (size_t i = 0; i < 3; i++)
+        ASSERT(v1[i] == arr1[i + 1]);
+    ASSERT(it == v1.end());
+
+    it = v1.erase(v1.end() - 2);
+    ASSERT(v1.size() == 2);
+    ASSERT(v1.capacity() >= 2);
+    ASSERT(v1[0] == 2);
+    ASSERT(v1[1] == 4);
+    ASSERT(*it == 4);
+
+    v1.assign(arr1, arr1 + 5);
+    it = v1.erase(v1.begin() + 1, v1.begin() + 3);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 4);
+    ASSERT(v1[2] == 5);
+    ASSERT(*it == 4);
+
+    it = v1.erase(v1.begin() + 1, v1.end());
+    ASSERT(v1.size() == 1);
+    ASSERT(v1.capacity() >= 1);
+    ASSERT(v1[0] == 1);
+    ASSERT(it == v1.end());
+
+}
+
+static void testSwap()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    ft::Vector<int> v2(arr1 + 1, arr1 + 4);
+
+    v1.swap(v2);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    for (size_t i = 0; i < 3; i++)
+        ASSERT(v1[i] == arr1[i + 1]);
+    ASSERT(v2.size() == 5);
+    ASSERT(v2.capacity() >= 3);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v2[i] == arr1[i]);
+
+    v2.swap(v1);
+    ASSERT(v2.size() == 3);
+    ASSERT(v2.capacity() >= 3);
+    for (size_t i = 0; i < 3; i++)
+        ASSERT(v2[i] == arr1[i + 1]);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 3);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v1[i] == arr1[i]);
+}
+
+static void testClear()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    v1.clear();
+    ASSERT(v1.size() == 0);
+}
+
+static void testSwapFunc()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    ft::Vector<int> v2(arr1 + 1, arr1 + 4);
+
+    std::swap(v1, v2);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    for (size_t i = 0; i < 3; i++)
+        ASSERT(v1[i] == arr1[i + 1]);
+    ASSERT(v2.size() == 5);
+    ASSERT(v2.capacity() >= 3);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v2[i] == arr1[i]);
+
+    std::swap(v1, v2);
+    ASSERT(v2.size() == 3);
+    ASSERT(v2.capacity() >= 3);
+    for (size_t i = 0; i < 3; i++)
+        ASSERT(v2[i] == arr1[i + 1]);
+    ASSERT(v1.size() == 5);
+    ASSERT(v1.capacity() >= 3);
+    for (size_t i = 0; i < 5; i++)
+        ASSERT(v1[i] == arr1[i]);
+}
+
 void vectorTest()
 {
     testConstructorDefault();
@@ -262,4 +622,21 @@ void vectorTest()
 
     testBegin();
 
+    testResize();
+    testReserve();
+
+    testOperatorBracket();
+    testAt();
+    testFront();
+    testBack();
+
+    testAssign();
+    testPushBack();
+    testPopBack();
+    testInsert();
+    testErase();
+    testSwap();
+    testClear();
+
+    testSwapFunc();
 }

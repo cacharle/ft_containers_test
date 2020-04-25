@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/25 13:40:44 by charles           #+#    #+#              #
-#    Updated: 2020/04/25 13:40:55 by charles          ###   ########.fr        #
+#    Updated: 2020/04/25 15:37:03 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ class Logs:
     def add_line(self, line):
         match = self.line_pattern.match(line)
         if match is None:
-            print("ERROR PARSING:", line)
+            print("\nERROR PARSING:", line)
         else:
             self.logs.append(match.groupdict())
             self._put_indicator(self.logs[-1]["prefix"])
