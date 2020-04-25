@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/25 13:40:44 by charles           #+#    #+#              #
-#    Updated: 2020/04/25 15:37:03 by charles          ###   ########.fr        #
+#    Updated: 2020/04/25 18:56:49 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,14 @@ class Logs:
         self.logs = []
         self.line_pattern = re.compile(
             r"^\[(?P<prefix>(FAIL SEGV)|(FAIL ASSERT)|(PASS)) *\] "
+            r"\{(?P<testname>.*)\} "
             r"(?P<filename>[a-z_]+\.cpp):"
             r"(?P<line>\d+) "
             r"\((?P<code>.*)\)$"
         )
         self.log_file_name = "result.log"
+        self.current_testname = ""
+        self.max_output_log = 10
 
     def add_line(self, line):
         match = self.line_pattern.match(line)
@@ -36,6 +39,9 @@ class Logs:
             print("\nERROR PARSING:", line)
         else:
             self.logs.append(match.groupdict())
+            if self.logs[-1]["testname"] != self.current_testname:
+                self.current_testname = self.logs[-1]["testname"]
+                print("\n{}: ".format(self.current_testname), end="")
             self._put_indicator(self.logs[-1]["prefix"])
 
     def run(self):
@@ -53,9 +59,10 @@ class Logs:
         pass_str = green("[PASS] {}".format(pass_num))
         fail_str = red("[FAIL] {}".format(len(failed)))
         print("\nTotal {}    {}    {}\n".format(pass_num + len(failed), pass_str, fail_str))
-        for f in failed:
+        for f in failed[:self.max_output_log]:
             print(self.fail_formated(f, color=True))
-        print("\nSee {} for more information".format(self.log_file_name))
+        if len(failed) > self.max_output_log:
+            print("\nSee {} for more information".format(self.log_file_name))
 
     def write_log_file(self, failed):
         try:

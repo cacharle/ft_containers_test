@@ -2,6 +2,8 @@
 
 Unit test for the ft_containers project of school 42.
 
+![screenshot](./screenshot.png)
+
 # Usage
 
 Clone this repository such that:

@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:34:52 by charles           #+#    #+#             */
-/*   Updated: 2020/04/25 16:16:00 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 18:46:38 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 static void testConstructorDefault()
 {
+    testName = "Vector.Vector empty";
+
     ft::Vector<int> v1;
     ASSERT(v1.empty());
     ASSERT(v1.size() == 0);
@@ -36,6 +38,8 @@ static void testConstructorDefault()
 
 static void testConstructorFill()
 {
+    testName = "Vector.Vector fill";
+
     ft::Vector<int> v1(0);
     ASSERT(v1.empty());
     ASSERT(v1.size() == 0);
@@ -72,6 +76,8 @@ static void testConstructorFill()
 
 static void testConstructorRange()
 {
+    testName = "Vector.Vector range";
+
     int         arr1[5] = {1, 2, 3, 4, 5};
     std::string arr2[3] = {"bonjour", "je", "suis"};
     float       arr3[4] = {42.1, 42.2, 42.3, 42.4};
@@ -100,6 +106,8 @@ static void testConstructorRange()
 
 static void testConstructorCopy()
 {
+    testName = "Vector.Vector copy";
+
     int                             arr1[5] = {1, 2, 3, 4, 5};
     std::string                     arr2[3] = {"bonjour", "je", "suis"};
     ft::Vector<int>                 v1_copied(arr1, arr1 + 5);
@@ -149,8 +157,10 @@ static void testConstructorCopy()
     ASSERT(v4.capacity() == v4_copied.capacity());
 }
 
-static void testOperatorEqual()
+static void testOperatorAssign()
 {
+    testName = "Vector.operator=";
+
     int                             arr1[5] = {1, 2, 3, 4, 5};
     std::string                     arr2[3] = {"bonjour", "je", "suis"};
     ft::Vector<int>                 v1_duplicated(arr1, arr1 + 5);
@@ -206,6 +216,8 @@ static void testOperatorEqual()
 
 static void testBegin()
 {
+    testName = "Vector.begin";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -252,8 +264,123 @@ static void testBegin()
         ASSERT(*v1_it-- == arr1[4 - i]);
 }
 
+static void testEnd()
+{
+    testName = "Vector.end";
+
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    ft::Vector<int>::iterator v1_it = v1.end();
+    ASSERT(v1_it[-1] == 5);
+    ASSERT(v1_it[-2] == 4);
+    ASSERT(v1_it[-3] == 3);
+    ASSERT(v1_it[-4] == 2);
+    ASSERT(v1_it[-5] == 1);
+
+    ASSERT(v1_it == v1.end());
+    ASSERT(v1_it != v1.begin());
+    ASSERT(v1_it != v1.rbegin());
+    ASSERT(v1_it != v1.rend());
+
+    ASSERT(v1_it >= v1.end());
+    ASSERT(v1_it >= v1.end());
+    ASSERT(v1_it <= v1.end());
+    ASSERT(v1_it <= v1.end());
+    ASSERT(v1_it > v1.begin());
+    ASSERT(v1.begin() < v1_it);
+
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*(v1_it - i - 1) == arr1[4 - i]);
+
+    --v1_it;
+    for (size_t i = 0; v1_it != v1.begin(); --v1_it, i++)
+        ASSERT(*v1_it == arr1[4 - i]);
+    ASSERT(v1_it == v1.begin());
+    ASSERT(*v1_it == arr1[0]);
+
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*(v1_it + i) == arr1[i]);
+
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*v1_it++ == arr1[i]);
+    ASSERT(v1_it == v1.end());
+
+    v1_it--;
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*v1_it-- == arr1[4 - i]);
+}
+
+static void testRbegin()
+{
+    testName = "Vector.rbegin";
+
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    ft::Vector<int>::iterator v1_it = v1.rbegin();
+    ASSERT(v1_it[0] == 5);
+    ASSERT(v1_it[1] == 4);
+    ASSERT(v1_it[2] == 3);
+    ASSERT(v1_it[3] == 2);
+    ASSERT(v1_it[4] == 1);
+
+    ASSERT(v1_it == v1.rbegin());
+    ASSERT(v1_it != v1.rend());
+    ASSERT(v1_it != v1.begin());
+    ASSERT(v1_it != v1.end());
+
+    ASSERT(v1_it >= v1.rbegin());
+    ASSERT(v1_it >= v1.rbegin());
+    ASSERT(v1_it <= v1.rbegin());
+    ASSERT(v1_it <= v1.rbegin());
+    ASSERT(v1_it > v1.begin());
+    ASSERT(v1_it < v1.end());
+    ASSERT(v1_it < v1.rend());
+
+
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*(v1_it + i) == arr1[4 - i]);
+
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*v1_it++ == arr1[4 - i]);
+    ASSERT(v1_it == v1.rend());
+}
+
+static void testRend()
+{
+    testName = "Vector.rend";
+
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+
+    ft::Vector<int>::iterator v1_it = v1.rend();
+    ASSERT(v1_it[-1] == 1);
+    ASSERT(v1_it[-2] == 2);
+    ASSERT(v1_it[-3] == 3);
+    ASSERT(v1_it[-4] == 4);
+    ASSERT(v1_it[-5] == 5);
+
+    ASSERT(v1_it == v1.rend());
+    ASSERT(v1_it != v1.rbegin());
+    ASSERT(v1_it != v1.begin());
+    ASSERT(v1_it != v1.end());
+
+    ASSERT(v1_it >= v1.rend());
+    ASSERT(v1_it >= v1.rend());
+    ASSERT(v1_it <= v1.rend());
+    ASSERT(v1_it <= v1.rend());
+    ASSERT(v1_it > v1.rbegin());
+
+    v1_it--;
+    for (size_t i = 0; i < v1.size(); i++)
+        ASSERT(*(v1_it - i) == arr1[i]);
+}
+
 static void testResize()
 {
+    testName = "Vector.resize";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -305,6 +432,8 @@ static void testResize()
 
 static void testReserve()
 {
+    testName = "Vector.reserve";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -335,6 +464,8 @@ static void testReserve()
 
 static void testOperatorBracket()
 {
+    testName = "Vector.operator[]";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -352,6 +483,8 @@ static void testOperatorBracket()
 
 static void testAt()
 {
+    testName = "Vector.at";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -381,6 +514,8 @@ static void testAt()
 
 static void testFront()
 {
+    testName = "Vector.front";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
     int&       mut  = v1.front();
@@ -391,6 +526,8 @@ static void testFront()
 
 static void testBack()
 {
+    testName = "Vector.back";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
     int&       mut  = v1.back();
@@ -401,6 +538,8 @@ static void testBack()
 
 static void testAssign()
 {
+    testName = "Vector.assign";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -427,6 +566,8 @@ static void testAssign()
 
 static void testPushBack()
 {
+    testName = "Vector.push_back";
+
     ft::Vector<int> v1;
 
     v1.push_back(1);
@@ -467,6 +608,8 @@ static void testPushBack()
 
 static void testPopBack()
 {
+    testName = "Vector.pop_back";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
 
@@ -503,11 +646,61 @@ static void testPopBack()
 
 static void testInsert()
 {
+    testName = "Vector.insert";
 
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1;
+    ft::Vector<int>::iterator it;
+
+    it = v1.insert(v1.end(), 1);
+    ASSERT(v1.size() == 1);
+    ASSERT(v1.capacity() >= 1);
+    ASSERT(v1[0] == 1);
+    ASSERT(*it == 1);
+
+    it = v1.insert(v1.end(), 2);
+    ASSERT(v1.size() == 2);
+    ASSERT(v1.capacity() >= 2);
+    ASSERT(v1[0] == 1);
+    ASSERT(v1[1] == 2);
+    ASSERT(*it == 2);
+
+    it = v1.insert(v1.begin(), 0);
+    ASSERT(v1.size() == 3);
+    ASSERT(v1.capacity() >= 3);
+    ASSERT(v1[0] == 0);
+    ASSERT(v1[1] == 1);
+    ASSERT(v1[2] == 2);
+    ASSERT(*it == 0);
+
+    v1.insert(v1.begin() + 1, arr1 + 1, arr1 + 4);
+    ASSERT(v1.size() == 6);
+    ASSERT(v1.capacity() >= 6);
+    ASSERT(v1[0] == 0);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == 3);
+    ASSERT(v1[3] == 4);
+    ASSERT(v1[4] == 1);
+    ASSERT(v1[5] == 2);
+
+    v1.insert(v1.begin() + 2, (size_t)3, (int)-1);
+    ASSERT(v1.size() == 9);
+    ASSERT(v1.capacity() >= 9);
+    ASSERT(v1[0] == 0);
+    ASSERT(v1[1] == 2);
+    ASSERT(v1[2] == -1);
+    ASSERT(v1[3] == -1);
+    ASSERT(v1[4] == -1);
+    ASSERT(v1[5] == 3);
+    ASSERT(v1[6] == 4);
+    ASSERT(v1[7] == 1);
+    ASSERT(v1[8] == 2);
 }
 
 static void testErase()
 {
+    testName = "Vector.erase";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
     ft::Vector<int>::iterator it;
@@ -552,6 +745,8 @@ static void testErase()
 
 static void testSwap()
 {
+    testName = "Vector.swap";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
     ft::Vector<int> v2(arr1 + 1, arr1 + 4);
@@ -579,14 +774,72 @@ static void testSwap()
 
 static void testClear()
 {
+    testName = "Vector.clear";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
     v1.clear();
     ASSERT(v1.size() == 0);
 }
 
+static void testOperatorEqual()
+{
+    testName = "Vector.operator[== !=]";
+
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::Vector<int> v1(arr1, arr1 + 5);
+    ft::Vector<int> v2(arr1 + 1, arr1 + 4);
+    ft::Vector<int> v3(v1);
+
+    ASSERT(v1 != v2);
+    ASSERT(v1 == v3);
+    ASSERT(v2 != v1);
+    ASSERT(v2 != v3);
+    ASSERT(v3 == v1);
+    ASSERT(v3 != v2);
+
+    v3[0] = 0;
+    ASSERT(v1 != v3);
+    ASSERT(v3 != v1);
+}
+
+static void testOperatorCompar()
+{
+    testName = "Vector.operator[< > <= >=]";
+
+    std::string s1 = "bonjour";
+    std::string s2 = "bonjoura";
+    std::string s3 = "bonjou";
+    ft::Vector<char> v1(s1.begin(), s1.end());
+    ft::Vector<char> v2(s2.begin(), s2.end());
+    ft::Vector<char> v3(s3.begin(), s3.end());
+
+    ASSERT(v1 < v2);
+    ASSERT(v1 > v3);
+    ASSERT(v1 <= v2);
+    ASSERT(v1 >= v3);
+    ASSERT(v1 <= v1);
+    ASSERT(v1 >= v1);
+
+    ASSERT(v2 > v1);
+    ASSERT(v2 > v3);
+    ASSERT(v2 >= v1);
+    ASSERT(v2 >= v3);
+    ASSERT(v2 <= v2);
+    ASSERT(v2 >= v2);
+
+    ASSERT(v3 < v1);
+    ASSERT(v3 < v2);
+    ASSERT(v3 <= v1);
+    ASSERT(v3 <= v2);
+    ASSERT(v3 <= v3);
+    ASSERT(v3 >= v3);
+}
+
 static void testSwapFunc()
 {
+    testName = "std::swap(Vector, Vector)";
+
     int             arr1[5] = {1, 2, 3, 4, 5};
     ft::Vector<int> v1(arr1, arr1 + 5);
     ft::Vector<int> v2(arr1 + 1, arr1 + 4);
@@ -618,9 +871,12 @@ void vectorTest()
     testConstructorFill();
     testConstructorRange();
     testConstructorCopy();
-    testOperatorEqual();
+    testOperatorAssign();
 
     testBegin();
+    testEnd();
+    testRbegin();
+    testRend();
 
     testResize();
     testReserve();
@@ -638,5 +894,7 @@ void vectorTest()
     testSwap();
     testClear();
 
+    testOperatorEqual();
+    testOperatorCompar();
     testSwapFunc();
 }

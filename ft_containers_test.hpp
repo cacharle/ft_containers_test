@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:54 by charles           #+#    #+#             */
-/*   Updated: 2020/04/25 13:15:56 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/25 18:46:59 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include <string>
+# include <algorithm>
 
 # include <cstdlib>
 # include <unistd.h>
@@ -24,6 +25,7 @@
 # include "Vector.hpp"
 
 static pid_t testSegvPid;
+extern std::string testName;
 
 # define SANDBOX(x) do {             \
     testSegvPid = fork();            \
