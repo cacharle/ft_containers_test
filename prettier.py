@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/25 13:40:44 by charles           #+#    #+#              #
-#    Updated: 2020/04/25 18:56:49 by charles          ###   ########.fr        #
+#    Updated: 2020/04/26 12:58:32 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,14 +24,17 @@ class Logs:
         self.logs = []
         self.line_pattern = re.compile(
             r"^\[(?P<prefix>(FAIL SEGV)|(FAIL ASSERT)|(PASS)) *\] "
+            r"\{(?P<testcontainer>.*)\} "
             r"\{(?P<testname>.*)\} "
-            r"(?P<filename>[a-z_]+\.cpp):"
+            r"(?P<filename>[a-z_/]+\.cpp):"
             r"(?P<line>\d+) "
             r"\((?P<code>.*)\)$"
         )
         self.log_file_name = "result.log"
         self.current_testname = ""
+        self.current_testcontainer = ""
         self.max_output_log = 10
+        self.verbose = True
 
     def add_line(self, line):
         match = self.line_pattern.match(line)
@@ -39,26 +42,36 @@ class Logs:
             print("\nERROR PARSING:", line)
         else:
             self.logs.append(match.groupdict())
-            if self.logs[-1]["testname"] != self.current_testname:
-                self.current_testname = self.logs[-1]["testname"]
-                print("\n{}: ".format(self.current_testname), end="")
-            self._put_indicator(self.logs[-1]["prefix"])
+            if self.verbose:
+                if self.logs[-1]["testcontainer"] != self.current_testcontainer:
+                    self.current_testcontainer = self.logs[-1]["testcontainer"]
+                    if len(self.logs) != 1:
+                        print("\n")
+                    print("==={}===".format(self.current_testcontainer), end="")
+                if self.logs[-1]["testname"] != self.current_testname:
+                    self.current_testname = self.logs[-1]["testname"]
+                    print("\n{}: ".format(self.current_testname), end="")
+                self._put_indicator(self.logs[-1]["prefix"])
+            else:
+                print("\033[Am{}\r".format(len(self.logs)))
 
     def run(self):
-        self.capture()
+        for line in sys.stdin:
+            self.add_line(line)
         failed = [x for x in self.logs if x["prefix"] == "FAIL SEGV" or x["prefix"] == "FAIL ASSERT"]
         self.put_summary(failed)
         self.write_log_file(failed)
 
-    def capture(self):
-        for line in sys.stdin:
-            self.add_line(line)
-
     def put_summary(self, failed):
         pass_num = len([x for x in self.logs if x["prefix"] == "PASS"])
-        pass_str = green("[PASS] {}".format(pass_num))
-        fail_str = red("[FAIL] {}".format(len(failed)))
-        print("\nTotal {}    {}    {}\n".format(pass_num + len(failed), pass_str, fail_str))
+        total = pass_num + len(failed)
+        if total == 0:
+            total = 1
+        pass_str = green("[PASS] {} {}%".format(pass_num, int(100 * float(pass_num) / total)))
+        fail_str = red("[FAIL] {} {}%".format(len(failed), int(100 * float(len(failed)) / total)))
+        print("\nTotal {}    {}    {}".format(pass_num + len(failed), pass_str, fail_str))
+        if len(failed) != 0:
+            print()
         for f in failed[:self.max_output_log]:
             print(self.fail_formated(f, color=True))
         if len(failed) > self.max_output_log:

@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:54 by charles           #+#    #+#             */
-/*   Updated: 2020/04/25 18:46:59 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/26 12:10:20 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@
 # include <sys/wait.h>
 
 # include "Vector.hpp"
+# include "List.hpp"
 
 static pid_t testSegvPid;
 extern std::string testName;
+extern std::string testContainer;
 
 # define SANDBOX(x) do {             \
     testSegvPid = fork();            \
@@ -64,5 +66,11 @@ void log(const std::string& prefix,
 */
 
 void vectorTest();
+
+/*
+** list_test.cpp
+*/
+
+void listTest();
 
 #endif

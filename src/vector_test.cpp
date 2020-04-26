@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:34:52 by charles           #+#    #+#             */
-/*   Updated: 2020/04/25 18:46:38 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/26 12:08:35 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -867,6 +867,8 @@ static void testSwapFunc()
 
 void vectorTest()
 {
+    testContainer = "Vector";
+
     testConstructorDefault();
     testConstructorFill();
     testConstructorRange();
