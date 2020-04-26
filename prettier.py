@@ -6,12 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/25 13:40:44 by charles           #+#    #+#              #
-#    Updated: 2020/04/26 12:58:32 by charles          ###   ########.fr        #
+#    Updated: 2020/04/26 15:04:11 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import sys
 import re
+import math
 
 def green(s):
     return "\033[32m{}\033[0m".format(s)
@@ -67,8 +68,8 @@ class Logs:
         total = pass_num + len(failed)
         if total == 0:
             total = 1
-        pass_str = green("[PASS] {} {}%".format(pass_num, int(100 * float(pass_num) / total)))
-        fail_str = red("[FAIL] {} {}%".format(len(failed), int(100 * float(len(failed)) / total)))
+        pass_str = green("[PASS] {} {:.2f}%".format(pass_num, 100.0 * float(pass_num) / total))
+        fail_str = red("[FAIL] {} {:.2f}%".format(len(failed), 100.0 * float(len(failed)) / total))
         print("\nTotal {}    {}    {}".format(pass_num + len(failed), pass_str, fail_str))
         if len(failed) != 0:
             print()
@@ -98,9 +99,11 @@ class Logs:
             sys.stdout.write(red('!'))
         sys.stdout.flush()
 
+
 def main():
     logs = Logs()
     logs.run()
+
 
 if __name__ == "__main__":
     main()

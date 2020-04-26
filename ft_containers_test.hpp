@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:54 by charles           #+#    #+#             */
-/*   Updated: 2020/04/26 12:10:20 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/26 14:45:27 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 # include "Vector.hpp"
 # include "List.hpp"
+# include "Stack.hpp"
 
 static pid_t testSegvPid;
 extern std::string testName;
@@ -72,5 +73,11 @@ void vectorTest();
 */
 
 void listTest();
+
+/*
+** stack_test.cpp
+*/
+
+void stackTest();
 
 #endif

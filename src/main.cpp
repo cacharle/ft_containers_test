@@ -6,7 +6,7 @@
 /*   By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 20:28:20 by charles           #+#    #+#             */
-/*   Updated: 2020/04/26 08:41:48 by charles          ###   ########.fr       */
+/*   Updated: 2020/04/26 14:39:40 by charles          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,14 @@ int main(int argc, char **argv)
             vectorTest();
         if (option == "list")
             listTest();
+        if (option == "stack")
+            stackTest();
     }
     else
     {
         vectorTest();
         listTest();
+        stackTest();
     }
     return 0;
 }
